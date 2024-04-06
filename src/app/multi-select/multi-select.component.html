@@ -1,0 +1,92 @@
+<div class="w-full flex items-center justify-center">
+  <div class="w-full md:w-3/4 lg:w-4/6 xl:w-2/4 relative">
+    <div
+      (click)="toggle()"
+      tabindex="0"
+      aria-expanded="true"
+      [id]="name"
+      class="m-auto flex text-sm cursor-pointer text-gray-500 border border-gray-300 rounded shadow-sm transition-all duration-300 focus:outline-none bg-white hover:border-gray-400 focus:border-purple-500 focus:ring focus:ring-purple-500/20"
+    >
+      <div class="grow pl-2.5 py-2 pr-2 flex flex-wrap gap-1">
+        @for (option of selectedOptions; track $index) {
+        <div class="bg-gray-200 border rounded-sm flex space-x-1 pl-1">
+          <p class="truncate cursor-default select-none">{{ option }}</p>
+          <div
+            (click)="toggleOption(option)"
+            class="flex items-center px-1 cursor-pointer rounded-r-sm hover:bg-red-200 hover:text-red-600"
+          >
+            <ng-icon name="heroXMark" size="15"></ng-icon>
+          </div>
+        </div>
+        }
+      </div>
+      <div class="flex flex-none items-center gap-1 py-1.5 px-1">
+        <div (click)="clearOption()" class="mt-1">
+          <ng-icon
+            name="heroXMark"
+            size="20"
+            class="cursor-pointer p-0 !m-auto"
+          ></ng-icon>
+        </div>
+        <div class="h-full w-px bg-gray-300 inline-block"></div>
+        <ng-icon
+          name="heroChevronRight"
+          size="20"
+          class="transition duration-300 ease-in-out"
+          [class]="open ? 'transform rotate-90 text-gray-500' : 'text-gray-300'"
+        ></ng-icon>
+      </div>
+    </div>
+    @if (open) {
+    <div
+      class="absolute z-10 w-full bg-white shadow-lg border rounded py-1 mt-1.5 text-sm text-gray-700"
+      tabindex="-1"
+    >
+      <div class="relative py-1 px-2.5">
+        <ng-icon
+          class="absolute w-5 h-5 mt-2.5 pb-0.5 ml-2 text-gray-500"
+          name="heroMagnifyingGlass"
+          size="20"
+        ></ng-icon>
+        <input
+          #searchInput
+          type="text"
+          name="Search"
+          id="Search"
+          [(ngModel)]="searchText"
+          (input)="onSearchChange()"
+          placeholder="Search..."
+          class="w-full py-2 pl-8 text-sm text-gray-500 bg-gray-100 border border-gray-200 rounded focus:border-gray-200 focus:ring-0 focus:outline-none"
+        />
+      </div>
+      <div role="option" class="max-h-72 overflow-y-auto">
+        @if (filteredOptions.length != 0) { @for (option of filteredOptions;
+        track $index) {
+        <div class="px-2.5 last:border-0 border-b-[1px] py-2 border-gray-200">
+          <div
+            class="pr-2 py-2 cursor-default select-none truncate font-bold text-gray-700"
+          >
+            Category
+          </div>
+          <li
+            class="block transition duration-200 px-2 py-2 cursor-pointer select-none truncate rounded text-gray-500 hover:bg-blue-100 hover:text-blue-500"
+            role="option"
+            aria-selected="false"
+            (click)="toggleOption(option)"
+          >
+            {{ option }}
+          </li>
+        </div>
+        } } @else {
+        <div
+          class="px-2 py-2 cursor-not-allowed truncate text-gray-400 select-none"
+        >
+          No options found
+        </div>
+        }
+      </div>
+    </div>
+
+    }
+  </div>
+</div>
