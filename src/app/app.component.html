@@ -1,19 +1,12 @@
 <div class="w-full h-screen p-14">
-  <form
-    action="#"
-    class="flex flex-col justify-center align-middle w-full gap-4"
-  >
-    <label
-      for="multi-select-tag"
-      class="text-xl text-center font-bold text-gray-700"
-      >Select Multiple Tags</label
-    >
+  <form class="flex flex-col justify-center align-middle w-full gap-4">
     <app-multi-select
-      name="multi-select-tag"
       [options]="options"
-      [selectedOptions]="selectedOptions"
-      (selectOptionChange)="toggleOption($event)"
-      (clearOptionChange)="clearOption()"
+      [isMultipleTag]="true"
+      label="Multi-Select Tag"
+      (selectedOptionChange)="setMultiTagValue($event)"
     ></app-multi-select>
+
+    <button type="button" (click)="onSubmit()">Submit</button>
   </form>
 </div>

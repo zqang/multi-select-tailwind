@@ -1,14 +1,19 @@
 <div class="w-full flex items-center justify-center">
   <div class="w-full md:w-3/4 lg:w-4/6 xl:w-2/4 relative">
+    <label
+      for="multi-select-tag"
+      class="text-xl text-center font-bold text-gray-700"
+      >{{ label }}</label
+    >
     <div
       (click)="toggle()"
       tabindex="0"
       aria-expanded="true"
-      [id]="name"
+      id="multi-select-tag"
       class="m-auto flex text-sm cursor-pointer text-gray-500 border border-gray-300 rounded shadow-sm transition-all duration-300 focus:outline-none bg-white hover:border-gray-400 focus:border-purple-500 focus:ring focus:ring-purple-500/20"
     >
       <div class="grow pl-2.5 py-2 pr-2 flex flex-wrap gap-1">
-        @for (option of selectedOptions; track $index) {
+        @if(isMultipleTag){ @for (option of selectedOptions; track $index) {
         <div class="bg-gray-200 border rounded-sm flex space-x-1 pl-1">
           <p class="truncate cursor-default select-none">{{ option }}</p>
           <div
@@ -18,6 +23,10 @@
             <ng-icon name="heroXMark" size="15"></ng-icon>
           </div>
         </div>
+        } } @else {
+        <p class="truncate cursor-default select-none">
+          {{ selectedOptions[0] }}
+        </p>
         }
       </div>
       <div class="flex flex-none items-center gap-1 py-1.5 px-1">

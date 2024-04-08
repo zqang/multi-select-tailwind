@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MultiSelectComponent } from './multi-select/multi-select.component';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -10,24 +11,19 @@ import { MultiSelectComponent } from './multi-select/multi-select.component';
   imports: [RouterOutlet, MultiSelectComponent],
 })
 export class AppComponent {
+  fb = inject(FormBuilder);
   title = 'multi-select-tailwind';
   options: string[] = ['option1', 'option2', 'option3'];
-  selectedOptions: string[] = [];
-  toggleOption(opt: string) {
-    if (this.selectedOptions.includes(opt)) {
-      this.selectedOptions = this.selectedOptions.filter(
-        (value) => value !== opt
-      );
-      this.options.push(opt);
-    } else {
-      this.selectedOptions.push(opt);
-      this.options = this.options.filter((value) => value !== opt);
-    }
+  people = this.fb.group({
+    tag: this.fb.control<string[]>([]),
+  });
+
+  setMultiTagValue($event: string[]) {
+    console.log($event);
+    this.people.controls.tag.setValue($event);
   }
 
-  clearOption() {
-    //can put options to original options then assign original
-    this.options = this.options.concat(this.selectedOptions);
-    this.selectedOptions = [];
+  onSubmit() {
+    console.log(this.people.value);
   }
 }

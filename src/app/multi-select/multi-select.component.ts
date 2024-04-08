@@ -10,9 +10,8 @@ import {
   input,
   output,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { NgIconComponent } from '@ng-icons/core';
-import { debounceTime, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-multi-select',
@@ -22,12 +21,14 @@ import { debounceTime, fromEvent } from 'rxjs';
   styleUrl: './multi-select.component.css',
 })
 export class MultiSelectComponent implements OnInit, OnChanges {
-  @Input() name: string = '';
+  @Input() label: string = '';
   @Input() options: string[] = [];
-  @Input() selectedOptions: string[] = [];
+  @Input() isMultipleTag: boolean = false;
+  @Input() formControl: string = '';
   open: boolean = false;
+  selectedOptions: string[] = [];
   filteredOptions: string[] = this.options;
-  selectOptionChange = output<string>();
+  selectedOptionChange = output<string[]>();
   clearOptionChange = output();
   searchText: string = '';
 
@@ -52,7 +53,6 @@ export class MultiSelectComponent implements OnInit, OnChanges {
         opt.toLowerCase().includes(this.searchText.toLowerCase())
       );
     }
-    console.log(this.filteredOptions);
   }
 
   toggle() {
@@ -60,10 +60,29 @@ export class MultiSelectComponent implements OnInit, OnChanges {
   }
 
   toggleOption(option: string) {
-    this.selectOptionChange.emit(option);
+    if (this.isMultipleTag) {
+      if (this.selectedOptions.includes(option)) {
+        this.selectedOptions = this.selectedOptions.filter(
+          (value) => value !== option
+        );
+        this.filteredOptions.push(option);
+      } else {
+        this.selectedOptions.push(option);
+        this.filteredOptions = this.filteredOptions.filter(
+          (value) => value !== option
+        );
+      }
+    } else {
+      this.selectedOptions = [option];
+      this.filteredOptions = this.options.filter((value) => value !== option);
+    }
+
+    this.selectedOptionChange.emit(this.selectedOptions);
   }
 
   clearOption() {
-    this.clearOptionChange.emit();
+    this.filteredOptions = this.filteredOptions.concat(this.selectedOptions);
+    this.selectedOptions = [];
+    this.selectedOptionChange.emit(this.selectedOptions);
   }
 }
